@@ -20,6 +20,14 @@ apis: []
 common:
   - type: Website
     url: https://www.fs.usda.gov/
+  - type: Integrations
+    url: https://www.fs.usda.gov/managing-land/fire/partners
+integrations:
+  - name: U.S. flag
+  - name: Dot gov
+  - name: Https
+  - name: usda
+  - name: usfs shield
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
