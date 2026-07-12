@@ -18,6 +18,8 @@ url: >-
 specificationVersion: '0.19'
 apis: []
 common:
+  - type: DomainSecurity
+    url: security/forest-service-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/USDAForestService
   - type: LinkedIn
