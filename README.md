@@ -71,7 +71,7 @@ The Forest Service is an agency within the U.S. Department of Agriculture that i
 ## Scope
 
 - **Type:** Index
-- **Position:** Consumer
+- **Position:** Producing
 - **Access:** 3rd-Party
 
 ## Tags:
@@ -87,7 +87,30 @@ The Forest Service is an agency within the U.S. Department of Agriculture that i
 
 ## APIs
 
-_No directly published APIs at this time. The U.S. Forest Service provides data through agency portals, FSGeodata Clearinghouse, and Recreation.gov rather than a single public REST API surface._
+The Forest Service runs four free, entirely unauthenticated public HTTP APIs plus a
+machine-readable open-data catalog. Every endpoint referenced in this repository was called
+anonymously and returned HTTP 200 on 2026-09-10.
+
+- **[FIADB-API (EVALIDator)](https://apps.fs.usda.gov/fiadb-api/)** — `https://apps.fs.usda.gov/fiadb-api` —
+  Forest Inventory and Analysis population estimates with standard errors, variances and plot
+  counts. Live value dictionaries at `/fullreport/parameters/<name>`.
+- **[Research Data Archive Web Service](https://www.fs.usda.gov/rds/archive/webservice/)** —
+  `https://www.fs.usda.gov/rds/archive/webservice` — `/search`, `/product`, `/organizations`,
+  `/efrs`, plus an OAI-PMH 2.0 repository at `/oaipmh` serving Dublin Core and FGDC metadata.
+  DOI-registered under the `10.2737` prefix.
+- **[FSGeodata Enterprise Data Warehouse Map Services](https://data.fs.usda.gov/geodata/edw/mapServices.php)** —
+  `https://apps.fs.usda.gov/arcx/rest/services` — ArcGIS REST 11.5, nine folders, 144 MapServer
+  services in EDW alone. Each service also publishes a WSDL 1.1 SOAP contract with 55 operations.
+- **[FSGeodata Research Data Warehouse Map Services](https://data.fs.usda.gov/geodata/)** —
+  `https://apps.fs.usda.gov/fsgisx01/rest/services` — a second ArcGIS REST server.
+- **[Geospatial Data Discovery](https://data-usfs.hub.arcgis.com/)** —
+  `https://data-usfs.hub.arcgis.com/api/feed/dcat-us/1.1.json` — the agency's DCAT-US 1.1 /
+  Project Open Data dataset catalog.
+
+There is no OpenAPI, AsyncAPI or GraphQL description for any of these surfaces, and no MCP server
+or A2A agent card is published. The one first-party OpenAPI the agency ever shipped — a Swagger
+2.0 description of the Open Forest permit platform — describes a decommissioned service whose
+host no longer resolves, and is recorded in `lifecycle/` rather than `openapi/` for that reason.
 
 ## Common Properties
 

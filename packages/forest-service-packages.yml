@@ -1,0 +1,71 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  CRAN metadata (crandb.r-pkg.org), PyPI JSON API, npm registry, and the USDAForestService GitHub
+  organization. Version and published dates read from each registry's metadata endpoint on
+  2026-09-10.
+note: >-
+  The Forest Service ships no client SDK for any of its four HTTP APIs — the FIADB-API, the
+  Research Data Archive web service, and the two ArcGIS REST servers are all called with a plain
+  HTTP client, and the FIADB-API docs illustrate exactly that with hand-rolled `requests` (Python)
+  and `httr` (R) examples rather than a library. What the agency does publish on a registry is its
+  scientific tooling: two CRAN packages that read Forest Inventory and Analysis data, maintained
+  out of the agency's own GitHub organization. They are first-party agency software but they are
+  not clients for the web APIs profiled here, and they are recorded as such.
+packages:
+  - name: FIESTA
+    registry: cran
+    official: true
+    language: r
+    version: 3.7.1
+    published: '2025-03-26'
+    url: https://cran.r-project.org/package=FIESTA
+    repository: https://github.com/USDAForestService/FIESTA
+    docs: https://usdaforestservice.github.io/FIESTA/
+    description: >-
+      Forest Inventory ESTimation and Analysis — estimation tool for analysts working with
+      sampled data from the FIA program. Authored by Forest Service Rocky Mountain Research
+      Station scientists (Frescino, Moisen, Patterson) and hosted in the agency's own GitHub org.
+    wraps_api: null
+    note: >-
+      Reads and estimates from FIA data; it is not a client for the FIADB-API HTTP surface.
+      Registry URL field resolves to github.com/USDAForestService, which is how first-party
+      status was established.
+  - name: FIESTAutils
+    registry: cran
+    official: true
+    language: r
+    version: 1.3.2
+    published: '2025-07-17'
+    url: https://cran.r-project.org/package=FIESTAutils
+    repository: https://github.com/USDAForestService/FIESTAutils
+    description: Utility functions supporting FIESTA.
+    wraps_api: null
+  - name: pyfia
+    registry: pypi
+    official: false
+    language: python
+    version: 1.4.3
+    published: '2026-07-13'
+    url: https://pypi.org/project/pyfia/
+    repository: https://github.com/mihiarc/pyfia
+    description: >-
+      Third-party Python library for Forest Inventory and Analysis data analysis.
+    note: >-
+      NOT first-party. Recorded because it is the most current community client in the FIA space
+      and a reader will meet it; its project URLs resolve to github.com/mihiarc, not to the
+      USDAForestService organization, so official is false.
+unpublished_first_party_software:
+  - name: ForestVegetationSimulator
+    url: https://github.com/USDAForestService/ForestVegetationSimulator
+    note: >-
+      Growth-and-yield modelling software distributed as source and installers from the agency's
+      GitHub org and website; no package-registry release, so no version/published fields can be
+      read from a registry endpoint.
+  - name: FSvolLib
+    url: https://github.com/USDAForestService/FSvolLib
+    note: Volume/biomass estimation library, source-distributed only, no registry release.
+counts:
+  official_packages: 2
+  total_packages: 3
+  api_client_sdks: 0

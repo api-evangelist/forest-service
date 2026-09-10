@@ -1,0 +1,97 @@
+generated: '2026-09-10'
+method: probed
+source: >-
+  Live probes of the four Forest Service API surfaces, the Research Data Archive releases page,
+  the USDAForestService GitHub organization, and status-page candidate hosts, 2026-09-10.
+note: >-
+  The Forest Service runs its public APIs the way a research agency runs a data product, not the
+  way a vendor runs a platform: surfaces stay up for a decade, versions are expressed in the
+  payload or in the service name rather than in the URL, and there is no published deprecation
+  policy, SLA, sunset window or status page anywhere in the estate. One API has already been
+  retired (Open Forest) and it was retired without any of that machinery — the repository was
+  archived and the hostname stopped resolving.
+versioning:
+  scheme: mixed, per surface — none of it is in the URL path
+  surfaces:
+    - api: Forest Service Research Data Archive Web Service
+      style: dated release notes on the service landing page
+      current: v2 (2019-08-02)
+      in_url: false
+      evidence: https://www.fs.usda.gov/rds/archive/webservice/
+    - api: FIADB-API / EVALIDator
+      style: version string emitted inside the response citation
+      current: >-
+        FIADB-API web-application Version 2.0, database FIADB_1.9.5.00 (observed 2026-09-10)
+      in_url: false
+      evidence: https://apps.fs.usda.gov/fiadb-api/
+      note: >-
+        The docs page carries a standing banner — "This page is under construction. Additional
+        content will be added until all endpoints are fully documented." — so the documented
+        surface is explicitly incomplete relative to the deployed one.
+    - api: FSGeodata ArcGIS REST services
+      style: per-service numeric suffix, plus the Esri product version
+      current: currentVersion 11.5
+      in_url: true
+      evidence: https://apps.fs.usda.gov/arcx/rest/services?f=json
+      note: >-
+        Service names carry a _01/_02 suffix that functions as the version — EDW_BasicOwnership
+        publishes both EDW_BasicOwnership_01 and EDW_BasicOwnership_02 side by side, which is the
+        only place in the estate where an old and a new revision of the same resource are served
+        concurrently.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  evidence: >-
+    No deprecation, sunset or versioning policy is published on the FSGeodata Clearinghouse
+    (https://data.fs.usda.gov/geodata/edw/mapServices.php, 200), the FIADB-API docs
+    (https://apps.fs.usda.gov/fiadb-api/, 200) or the Research Data Archive service page
+    (https://www.fs.usda.gov/rds/archive/webservice/, 200). No RFC 8594 Sunset or Deprecation
+    header appeared on any live response we observed.
+sla:
+  published: false
+  note: >-
+    No availability target or support commitment is stated. The only operational notice found
+    anywhere in the estate is a stale maintenance banner on the Map Services page announcing
+    intermittent outages over the weekend of 9-11 July 2021.
+status_page:
+  published: false
+  probes:
+    - url: https://status.fs.usda.gov/
+      status: 0
+      detail: DNS does not resolve.
+    - url: https://www.fs.usda.gov/status
+      status: 404
+    - url: https://apps.fs.usda.gov/status
+      status: 403
+    - url: https://usfs.statuspage.io/
+      status: 200
+      detail: >-
+        Not a Forest Service page. The subdomain is unclaimed and redirects to
+        https://www.atlassian.com/software/statuspage — a soft hit that must not be recorded as a
+        status page.
+retired_apis:
+  - name: U.S. Forest Service Permit Platform (Open Forest)
+    status: retired
+    contract_published: https://github.com/USDAForestService/fs-open-forest-platform/blob/master/server/src/docs/swagger.json
+    contract_shape: Swagger 2.0, 14 paths, 17 operations, 14 definitions, info.title "U.S. Forest Service Permit Platform"
+    scope: >-
+      Christmas tree permit sales and intake of special-use permit applications (noncommercial
+      group use, temporary outfitter and guide). Built with GSA 18F.
+    evidence:
+      - url: https://raw.githubusercontent.com/USDAForestService/fs-open-forest-platform/master/server/src/docs/swagger.json
+        status: 200
+      - url: https://openforest.fs.usda.gov/
+        status: 0
+        detail: DNS does not resolve.
+      - url: https://fs-intake-api.app.cloud.gov/uptime
+        status: 404
+        detail: 'cloud.gov: "Requested route does not exist."'
+    note: >-
+      The repository README carries an explicit archival notice — "This repository has been
+      archived and is no longer maintained… should not be used in production systems." The spec
+      is a real first-party Forest Service contract, but the platform it describes is
+      decommissioned and no host answers for it, so it is deliberately NOT saved into openapi/
+      and no OpenAPI pointer is emitted for it. Recording a contract for a service that cannot be
+      called would credit the agency with an API it no longer runs.
+deprecated_operations: []

@@ -1,0 +1,164 @@
+generated: '2026-09-10'
+method: derived
+source: >-
+  Derived from the four live Forest Service API surfaces probed on 2026-09-10 after a search for a
+  first-party server found none.
+status: candidate
+note: >-
+  The Forest Service ships no MCP server. Nothing was found on the agency's websites, in the
+  USDAForestService GitHub organization (16 repositories, none MCP-related), or on any
+  /.well-known/ path — and no endpoint was guessed at, because a guessed MCP URL that happens to
+  answer is worse than none. What follows is a CANDIDATE tool surface derived from endpoints this
+  pipeline actually called and got a 200 from; it describes what a server would expose if someone
+  built one, and it asserts nothing about the agency. Every tool below maps to a documented,
+  anonymous, read-only GET, which is about as clean a candidate surface as an agency ever offers.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: derived
+search_performed:
+  - target: agency websites (fs.usda.gov, research.fs.usda.gov, data.fs.usda.gov)
+    result: no MCP mention
+  - target: https://github.com/USDAForestService
+    result: 16 public repositories, none an MCP server
+  - target: /.well-known/ai-plugin.json on every host
+    result: 404 (fs.usda.gov estate), 500 (apps.fs.usda.gov)
+candidate_tools:
+  - name: search_research_data
+    description: Search Forest Service Research Data Archive publications by free text, funder or experimental forest.
+    backing_call: GET https://www.fs.usda.gov/rds/archive/webservice/search
+    parameters:
+      - name: query
+        type: string
+        required: false
+      - name: funder
+        type: string
+        required: false
+        note: value must come from list_funders
+      - name: efr
+        type: string
+        required: false
+        note: value must come from list_experimental_forests
+      - name: page
+        type: integer
+        required: false
+      - name: rows
+        type: integer
+        required: false
+      - name: sort
+        type: string
+        enum: [date, score]
+        required: false
+      - name: format
+        type: string
+        enum: [xml, json]
+        required: false
+    verified: https://www.fs.usda.gov/rds/archive/webservice/search?keyword=fire
+  - name: get_research_data_product
+    description: Fetch one Research Data Archive product by accession id, including its DOI, abstract, authors, funders and bounding coordinates.
+    backing_call: GET https://www.fs.usda.gov/rds/archive/webservice/product
+    parameters:
+      - name: id
+        type: string
+        required: true
+      - name: format
+        type: string
+        enum: [xml, json]
+        required: false
+    verified: https://www.fs.usda.gov/rds/archive/webservice/product?id=RDS-2013-0001
+  - name: list_funders
+    description: List the 405 organizations usable as a funder filter, with Crossref Funder Registry ids where matched.
+    backing_call: GET https://www.fs.usda.gov/rds/archive/webservice/organizations
+    parameters: []
+    verified: https://www.fs.usda.gov/rds/archive/webservice/organizations
+  - name: list_experimental_forests
+    description: List the 32 Experimental Forests and Ranges that have products in the archive, with product counts.
+    backing_call: GET https://www.fs.usda.gov/rds/archive/webservice/efrs
+    parameters: []
+    verified: https://www.fs.usda.gov/rds/archive/webservice/efrs
+  - name: harvest_archive_metadata
+    description: Harvest archive metadata over OAI-PMH 2.0 in Dublin Core or FGDC.
+    backing_call: GET https://www.fs.usda.gov/rds/archive/webservice/oaipmh
+    parameters:
+      - name: verb
+        type: string
+        enum: [Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, GetRecord]
+        required: true
+      - name: metadataPrefix
+        type: string
+        enum: [oai_dc, fgdc]
+        required: false
+    verified: https://www.fs.usda.gov/rds/archive/webservice/oaipmh?verb=Identify
+  - name: get_forest_inventory_estimate
+    description: >-
+      Generate a Forest Inventory and Analysis population estimate with sampling error, grouped by
+      row and column attributes, for one or more state/year evaluations.
+    backing_call: GET https://apps.fs.usda.gov/fiadb-api/fullreport
+    parameters:
+      - name: snum
+        type: string
+        required: true
+      - name: wc
+        type: string
+        required: true
+      - name: rselected
+        type: string
+        required: true
+      - name: cselected
+        type: string
+        required: true
+      - name: outputFormat
+        type: string
+        enum: [HTML, NHTML, JSON, NJSON, XML, NXML]
+        required: false
+        note: an agent should always pass NJSON
+      - name: strFilter
+        type: string
+        required: false
+      - name: estOnly
+        type: string
+        required: false
+    verified: https://apps.fs.usda.gov/fiadb-api/fullreport?rselected=Land%20Use%20-%20Major&cselected=Land%20use&snum=79&wc=102020&outputFormat=NJSON
+  - name: list_fia_parameter_values
+    description: Resolve the legal values for a classed FIADB-API parameter before calling for an estimate.
+    backing_call: GET https://apps.fs.usda.gov/fiadb-api/fullreport/parameters/{parameter}
+    parameters:
+      - name: parameter
+        type: string
+        enum: [snum, wc, rselected, cselected, pselected]
+        required: true
+    verified: https://apps.fs.usda.gov/fiadb-api/fullreport/parameters/snum
+  - name: list_map_services
+    description: Enumerate the Forest Service enterprise map services in a folder of the FSGeodata ArcGIS server.
+    backing_call: GET https://apps.fs.usda.gov/arcx/rest/services/{folder}
+    parameters:
+      - name: folder
+        type: string
+        enum: [EDW, RDW_AdminAndOwnership, RDW_Climate, RDW_FIA_ForestAtlas, RDW_InventoryAndProducts, RDW_LandscapeAndWildlife, RDW_Wildfire, Utilities, wo_nrm_iweb]
+        required: false
+      - name: f
+        type: string
+        enum: [json, pjson, html]
+        required: false
+    verified: https://apps.fs.usda.gov/arcx/rest/services/EDW?f=json
+  - name: describe_map_service
+    description: Read a map service resource document — description, copyright, capabilities, layer list and the FGDC metadata link.
+    backing_call: GET https://apps.fs.usda.gov/arcx/rest/services/{folder}/{service}/MapServer
+    parameters:
+      - name: folder
+        type: string
+        required: true
+      - name: service
+        type: string
+        required: true
+      - name: f
+        type: string
+        enum: [json, pjson]
+        required: false
+    verified: https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer?f=json
+counts:
+  candidate_tools: 9
+  published_tools: 0

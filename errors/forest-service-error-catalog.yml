@@ -1,0 +1,101 @@
+generated: '2026-09-10'
+method: probed
+source: >-
+  Deliberate malformed requests against each live Forest Service API surface, 2026-09-10. No
+  error reference is published by the agency for any of them, so every entry below is an observed
+  response, not a documented one.
+format: proprietary
+rfc9457: false
+note: >-
+  The agency publishes no error reference anywhere, and the three error shapes below disagree in
+  the way that costs an automated client the most: two of the four APIs answer a failed request
+  with HTTP 200 and an HTML page, and the ArcGIS servers answer with HTTP 200 and a JSON body
+  whose real status is buried in error.code. A client that branches on the HTTP status alone will
+  read every one of these failures as a success. That is the headline finding of this artifact.
+envelopes:
+  - api: FSGeodata ArcGIS REST services (arcx, fsgisx01)
+    shape: json
+    http_status_reliable: false
+    template: '{"error":{"code":<int>,"message":"<string>","details":[]}}'
+    detail: >-
+      The transport status is 200 and the meaningful status is error.code. A client must test for
+      the presence of the `error` key on every response.
+    evidence:
+      url: https://apps.fs.usda.gov/arcx/rest/services/EDW/NOT_A_SERVICE/MapServer?f=json
+      http_status: 200
+      body: '{"error":{"code":404,"message":"Service not found","details":[]}}'
+  - api: Forest Service Research Data Archive Web Service
+    shape: html
+    http_status_reliable: true
+    detail: >-
+      Failures return a real HTTP 404 but a text/html body — a CodeIgniter-style "404 Page Not
+      Found" page headed "Research Data Archive". There is no machine-readable error document and
+      no error code vocabulary. A missing required parameter and an unknown identifier are
+      indistinguishable.
+    evidence:
+      - url: https://www.fs.usda.gov/rds/archive/webservice/product?id=NOPE-9999-0000
+        http_status: 404
+        content_type: text/html; charset=UTF-8
+        note: unknown product id
+      - url: https://www.fs.usda.gov/rds/archive/webservice/product
+        http_status: 404
+        content_type: text/html; charset=UTF-8
+        note: required `id` parameter omitted — same 404, same page, no distinguishing signal
+  - api: FIADB-API / EVALIDator
+    shape: html
+    http_status_reliable: false
+    detail: >-
+      An invalid parameter value returns HTTP 200 with a text/html page titled
+      "EVALIDator | Error Page", even when the request asked for outputFormat=NJSON. The requested
+      output format is not honoured on the error path, so a JSON client receives HTML under a 200.
+    evidence:
+      - url: https://apps.fs.usda.gov/fiadb-api/fullreport?snum=99999&wc=102020&outputFormat=NJSON
+        http_status: 200
+        content_type: text/html; charset=utf-8
+        note: out-of-range estimate attribute number
+      - url: https://apps.fs.usda.gov/fiadb-api/fullreport
+        http_status: 200
+        content_type: text/html; charset=utf-8
+        note: no parameters at all
+problem_types:
+  - id: arcgis-service-not-found
+    code: 404
+    title: Service not found
+    http_status: 200
+    envelope: json
+    api: FSGeodata ArcGIS REST services
+    remediation: >-
+      Re-read the folder listing at /arcx/rest/services/<folder>?f=json — service names carry an
+      exact numeric suffix (EDW_BasicOwnership_01) and are case-sensitive.
+    evidence: https://apps.fs.usda.gov/arcx/rest/services/EDW/NOT_A_SERVICE/MapServer?f=json
+  - id: rda-product-not-found
+    code: null
+    title: Product not found or required parameter missing
+    http_status: 404
+    envelope: html
+    api: Research Data Archive
+    remediation: >-
+      Confirm the accession id against /search first. Ids match RDS-YYYY-NNNN with an optional
+      edition suffix (RDS-2011-0003.3); the documented format is alphanumerics, dashes and
+      periods only.
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/product?id=NOPE-9999-0000
+  - id: evalidator-invalid-parameter
+    code: null
+    title: EVALIDator error page
+    http_status: 200
+    envelope: html
+    api: FIADB-API
+    remediation: >-
+      Every classed parameter has a machine-readable value dictionary at
+      /fullreport/parameters/<parameter name> — /fullreport/parameters/snum,
+      /fullreport/parameters/wc, /fullreport/parameters/rselected,
+      /fullreport/parameters/cselected. Resolve values there before calling /fullreport.
+    evidence: https://apps.fs.usda.gov/fiadb-api/fullreport?snum=99999&wc=102020&outputFormat=NJSON
+client_guidance:
+  - Do not branch on the HTTP status alone on any Forest Service surface.
+  - On ArcGIS, treat the presence of a top-level `error` key as failure regardless of status.
+  - On the FIADB-API, treat a text/html content-type as failure when NJSON/NXML was requested.
+  - On the Research Data Archive, treat any non-XML/JSON content-type as failure.
+counts:
+  documented_by_provider: 0
+  observed: 3

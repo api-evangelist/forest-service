@@ -1,0 +1,31 @@
+generated: '2026-09-10'
+method: generated
+source: >-
+  Packaged Agent Skills for the two Forest Service APIs that expose a real multi-step flow. There
+  is no OpenAPI for any Forest Service surface, so each skill is grounded in the agency's own
+  published parameter reference and in live calls this pipeline made on 2026-09-10 — every
+  endpoint, parameter and response field named in a skill returned HTTP 200 when exercised. No
+  operationIds are cited because none exist; steps name HTTP method and path instead.
+skills:
+  - file: forest-service-find-research-data.md
+    name: Find and cite Forest Service research data
+    api: https://www.fs.usda.gov/rds/archive/webservice
+    operations:
+      - GET /organizations
+      - GET /efrs
+      - GET /search
+      - GET /product
+      - GET /oaipmh
+  - file: forest-service-forest-inventory-estimate.md
+    name: Produce a Forest Inventory and Analysis estimate
+    api: https://apps.fs.usda.gov/fiadb-api
+    operations:
+      - GET /fullreport/parameters/{name}
+      - GET /fullreport
+      - POST /fullreport
+not_written:
+  - api: FSGeodata ArcGIS REST services
+    reason: >-
+      A single-call catalog lookup, not a flow. The Esri ArcGIS REST API is already documented
+      exhaustively by the vendor and a skill would add nothing the service document does not
+      already say.

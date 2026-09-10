@@ -1,0 +1,100 @@
+generated: '2026-09-10'
+method: probed
+source: live HTTPS probes of the named /.well-known/ path list on every host this record knows
+note: >-
+  Every named path was probed on the Forest Service registrable domain, its www host, each API
+  baseURL host, the FSGeodata host and the research host. NOTHING was served: the fs.usda.gov
+  estate returns 404 for every /.well-known/ path, apps.fs.usda.gov returns 500 for the whole
+  prefix, and the parent department (www.usda.gov) answered 403 from its Akamai edge to every
+  request including a browser User-Agent, so USDA's department-level security.txt could not be
+  read from here. No WellKnown or SecurityTxt pointer is emitted — this file records an absence,
+  not a presence.
+hosts:
+  - host: www.fs.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: fs.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 301
+        file: null
+        note: redirects to www.fs.usda.gov, which 404s
+  - host: apps.fs.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 500
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 500
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 500
+        file: null
+      - path: /.well-known/api-catalog
+        status: 500
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 500
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 500
+        file: null
+      - path: /.well-known/agent.json
+        status: 500
+        file: null
+  - host: data.fs.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: research.fs.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: www.usda.gov
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        file: null
+        note: >-
+          Akamai "Access Denied" to every request, including one carrying a desktop browser
+          User-Agent and Accept headers. Not a finding about USDA — our probe was turned away.

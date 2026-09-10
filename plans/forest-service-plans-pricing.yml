@@ -1,0 +1,33 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  https://www.fs.usda.gov/about-agency/disclaimers-important-notices,
+  https://data.fs.usda.gov/geodata/ and
+  https://www.fs.usda.gov/rds/archive/webservice/, searched 2026-09-10.
+plan_count: 0
+note: >-
+  There are no plans, and there is no "contact sales" gate behind the absence either — this is a
+  U.S. federal agency publishing works of the United States government. Every API in this profile
+  is free, anonymous and open to anyone, and no pricing, quota, tier, billing or account surface
+  exists anywhere in the estate to record. The zero here means "there is nothing to buy", which is
+  a different fact from an enterprise vendor's zero, and it is why no Pricing or SignUp pointer is
+  emitted for this record.
+plans: []
+pricing_model: free / public domain
+cost_to_caller: none
+account_required: false
+commercial_terms:
+  license: >-
+    U.S. federal government works. Forest Service data and map products are generally in the
+    public domain within the United States; the agency asks for citation rather than payment.
+  citation_expected: true
+  citation_detail: >-
+    The FIADB-API embeds a formatted citation string in every JSON response
+    ("USDA Forest Service, Forest Inventory and Analysis Program, <date>… St. Paul, MN: U.S.
+    Department of Agriculture, Forest Service, Northern Research Station"), and every Research
+    Data Archive product carries a DOI under the 10.2737 prefix for the same purpose.
+  disclaimer: >-
+    The map services carry an explicit no-warranty notice in copyrightText: the data "are not
+    legal documents", may not be used to determine title, ownership, legal descriptions or
+    boundaries, and the user is responsible for verifying their limitations.
+  disclaimer_url: https://www.fs.usda.gov/about-agency/disclaimers-important-notices

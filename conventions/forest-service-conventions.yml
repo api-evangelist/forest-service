@@ -1,0 +1,125 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  https://www.fs.usda.gov/rds/archive/webservice/assets/ResearchDataArchiveAPIDocumentation.pdf
+  and https://apps.fs.usda.gov/fiadb-api/, corroborated by live calls to every surface on
+  2026-09-10.
+note: >-
+  The Forest Service estate has no single house style — it is four independently built APIs from
+  three different parts of the agency, and their cross-cutting semantics agree on almost nothing
+  except that they are read-only and free. What they do share is the one thing that matters most
+  to a caller: every surface is a plain GET with query parameters, returns within a second, and
+  needs no credential.
+auth_style:
+  summary: none on any surface
+  detail: See authentication/forest-service-authentication.yml.
+content_negotiation:
+  mechanism: query parameter, not Accept header
+  detail: >-
+    None of the surfaces honours an Accept header. Format is chosen with a query parameter whose
+    name differs per API — `format` on the Research Data Archive (xml default, json), `f` on the
+    ArcGIS servers (html default, json, pjson), `outputFormat` on the FIADB-API. A client that
+    sets Accept: application/json and nothing else will get XML or HTML back.
+  per_surface:
+    - api: Research Data Archive
+      param: format
+      values: [xml, json]
+      default: xml
+    - api: FIADB-API
+      param: outputFormat
+      values: [HTML, NHTML, JSON, NJSON, XML, NXML]
+      default: HTML
+      detail: >-
+        The N-prefixed variants are the flat, machine-friendly shapes ("flat formatted JSON
+        estimate values with metadata"); the unprefixed ones are the legacy EVALIDator
+        page/row/column cross-tabulation. An agent should ask for NJSON.
+    - api: ArcGIS REST (arcx, fsgisx01)
+      param: f
+      values: [html, json, pjson]
+      default: html
+pagination:
+  supported: partial
+  detail: >-
+    Only the Research Data Archive /search endpoint paginates, and it is documented: `page` (any
+    positive integer), `rows` (default 10) and `sort` (`date` default, or `score`). The response
+    echoes numFound, page, start and rows, so a client can compute the last page. A live call to
+    /search?keyword=fire returned numFound 1156 with page 1, start 0, rows 10. The FIADB-API and
+    the ArcGIS services return whole result sets or whole resource documents and do not paginate.
+  style: page-number
+  params:
+    page: page
+    page_size: rows
+    sort: sort
+  response_fields: [numFound, page, start, rows]
+  evidence: https://www.fs.usda.gov/rds/archive/webservice/search?keyword=fire
+filtering:
+  detail: >-
+    Research Data Archive /search accepts `query` (free text), `funder` (full organization name or
+    acronym, values enumerated by /organizations) and `efr` (values enumerated by /efrs). The two
+    lookup endpoints exist specifically so a client can discover legal filter values — an
+    unusually agent-friendly design for a 2014 API. The FIADB-API takes a raw SQL fragment in
+    `strFilter` (e.g. "COND.OWNCD = 40"), which is powerful and entirely unvalidated from the
+    caller's point of view.
+field_expansion:
+  supported: false
+metadata_echo:
+  supported: true
+  detail: >-
+    Every FIADB-API NJSON response opens with a `citation` string naming the program, the
+    timestamp, the application version and the publishing research station, and carries a
+    `metadata` object including the generated SQL. The Research Data Archive echoes `QTime` (query
+    seconds) on every response. Both are genuinely useful provenance for an agent recording where
+    a number came from.
+request_id_tracing:
+  supported: false
+  detail: >-
+    No request-id or correlation header is returned by any surface. www.fs.usda.gov sits behind
+    Azure Front Door and returns x-azure-ref, which identifies the edge request, not the API call.
+versioning:
+  detail: See lifecycle/forest-service-lifecycle.yml. No version appears in any URL path.
+error_envelope:
+  consistent: false
+  detail: >-
+    Three different shapes across four APIs, and two of them are HTML. See
+    errors/forest-service-error-catalog.yml.
+rate_limit_signaling:
+  headers: none
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header on any observed response. See
+    rate-limits/forest-service-rate-limits.yml.
+idempotency:
+  coverage: na
+  mechanism: none
+  scope: []
+  detail: >-
+    Not applicable, not missing. Every operation on every one of the four surfaces is a read.
+    There is no create, update or delete anywhere in the public estate — the FIADB-API accepts
+    POST but only as an alternative encoding for the same `fullreport` query, so replaying it is
+    inherently safe. An idempotency mechanism would have nothing to protect.
+  evidence: https://apps.fs.usda.gov/fiadb-api/
+reversibility:
+  grade: na
+  detail: >-
+    Not applicable. Reversibility asks whether an action an agent takes can be taken back; these
+    APIs offer no action to take. There is no write surface, therefore no reversal operation and
+    no window to state. Recording `na` here is the honest answer and deliberately not a zero —
+    the agency has not failed to document a rollback path, it has no path to document.
+  write_surface: false
+  reversal_operations: []
+dry_run_mode:
+  supported: na
+  detail: >-
+    Same reasoning as reversibility — a read-only estate has nothing to rehearse. The FIADB-API's
+    `estOnly=Y` parameter trims totals and subtotals out of a response; it is an output shaping
+    flag, not a dry run, and is recorded here so it is not mistaken for one.
+cors:
+  detail: >-
+    The FIADB-API returns Access-Control-Allow-Origin "*" (observed 2026-09-10), so it is callable
+    from browser JavaScript. The Research Data Archive returns no CORS header and is therefore
+    server-side only for cross-origin callers.
+cross_links:
+  errors: errors/forest-service-error-catalog.yml
+  lifecycle: lifecycle/forest-service-lifecycle.yml
+  authentication: authentication/forest-service-authentication.yml
+  rate_limits: rate-limits/forest-service-rate-limits.yml
+  conformance: conformance/forest-service-conformance.yml

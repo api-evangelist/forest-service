@@ -1,0 +1,155 @@
+generated: '2026-09-10'
+method: derived
+source: >-
+  Derived from live response bodies of the Research Data Archive web service and the FSGeodata
+  ArcGIS REST services, cross-read against
+  https://www.fs.usda.gov/rds/archive/webservice/assets/ResearchDataArchiveAPIDocumentation.pdf.
+  No OpenAPI exists for these APIs, so the entity graph is read off the XML/JSON the endpoints
+  actually returned on 2026-09-10 rather than from a schema.
+note: >-
+  Two independent data models, one per subsystem. They never join: the Research Data Archive is a
+  bibliographic graph keyed on accession id and DOI, and the FSGeodata estate is a spatial catalog
+  keyed on service and layer id. Nothing in either surface references the other.
+entities:
+  - name: Product
+    api: Research Data Archive
+    id_field: id
+    id_format: RDS-YYYY-NNNN with an optional edition suffix (RDS-2011-0003.3)
+    endpoint: /product?id=<id>
+    fields:
+      - id
+      - title
+      - edition
+      - doi
+      - latest_edition
+      - abstract
+      - publication_year
+      - authors[]
+      - publisher
+      - publication_places[]
+      - keywords[]
+      - places[]
+      - funders[]
+      - coordinates
+    relationships:
+      - type: has_many
+        target: Author
+        via: authors
+      - type: has_many
+        target: Organization
+        via: funders
+      - type: has_many
+        target: Keyword
+        via: keywords
+      - type: belongs_to
+        target: Product
+        via: latest_edition
+        note: >-
+          Self-reference: a superseded edition names its current successor. RDS-2013-0001 returns
+          latest_edition RDS-2013-0001-2, which is the only versioning link in the model.
+      - type: has_one
+        target: Coordinates
+        via: coordinates
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/product?id=RDS-2013-0001
+  - name: SearchResult
+    api: Research Data Archive
+    endpoint: /search
+    fields:
+      - QTime
+      - numFound
+      - page
+      - start
+      - rows
+      - 'products[]'
+    relationships:
+      - type: has_many
+        target: Product
+        via: products
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/search?keyword=fire
+  - name: Organization
+    api: Research Data Archive
+    id_field: acronym
+    endpoint: /organizations
+    fields:
+      - acronym
+      - name
+      - 'crossref{count,id,name,new}'
+    relationships:
+      - type: has_one
+        target: CrossrefFunder
+        via: crossref.id
+        note: Crossref Funder Registry identifier, where one has been matched.
+    cardinality_observed: 405
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/organizations
+  - name: ExperimentalForest
+    api: Research Data Archive
+    id_field: name
+    endpoint: /efrs
+    fields:
+      - name
+      - count
+    relationships:
+      - type: has_many
+        target: Product
+        via: search?efr=<name>
+    cardinality_observed: 32
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/efrs
+  - name: ServiceFolder
+    api: FSGeodata ArcGIS REST
+    id_field: name
+    endpoint: /arcx/rest/services/<folder>?f=json
+    cardinality_observed: 9
+    relationships:
+      - type: has_many
+        target: MapService
+        via: services
+    evidence: https://apps.fs.usda.gov/arcx/rest/services?f=json
+  - name: MapService
+    api: FSGeodata ArcGIS REST
+    id_field: name
+    id_format: <Folder>/<ServiceName>_<NN>
+    endpoint: /arcx/rest/services/<folder>/<service>/MapServer?f=json
+    fields:
+      - currentVersion
+      - serviceDescription
+      - mapName
+      - description
+      - copyrightText
+      - capabilities
+      - layers[]
+      - supportedExtensions
+    relationships:
+      - type: has_many
+        target: Layer
+        via: layers
+      - type: has_one
+        target: MetadataDocument
+        via: serviceDescription
+        note: >-
+          serviceDescription embeds an anchor to the FGDC metadata XML for the dataset, e.g.
+          https://data.fs.usda.gov/geodata/edw/edw_resources/meta/S_USA.BasicOwnership.xml
+    cardinality_observed: 144 in the EDW folder alone
+    evidence: https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer?f=json
+  - name: Layer
+    api: FSGeodata ArcGIS REST
+    id_field: id
+    endpoint: /arcx/rest/services/<folder>/<service>/MapServer/<layerId>?f=json
+    relationships:
+      - type: belongs_to
+        target: MapService
+        via: layer id referenced under the parent service
+identifier_schemes:
+  - scheme: RDS accession id
+    pattern: RDS-YYYY-NNNN[.E]
+    used_by: Research Data Archive
+  - scheme: DOI
+    prefix: '10.2737'
+    used_by: Research Data Archive
+    note: Every product is citable; the DOI is the durable external key.
+  - scheme: Crossref Funder Registry id
+    used_by: Research Data Archive organizations
+  - scheme: S_USA feature-class name
+    used_by: FSGeodata metadata documents (S_USA.BasicOwnership, S_USA.* per dataset)
+relationships_summary:
+  entities: 7
+  cross_subsystem_joins: 0

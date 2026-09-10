@@ -1,0 +1,124 @@
+generated: '2026-09-10'
+method: probed
+source: >-
+  Live protocol probes of the Forest Service Research Data Archive web service, the FSGeodata
+  ArcGIS REST/SOAP servers, and the agency Geospatial Data Discovery catalog, 2026-09-10.
+note: >-
+  Every entry below was established by fetching the surface and reading what it says about
+  itself, not from a marketing claim. Where a standard was probed and is genuinely absent it is
+  recorded with conforms:false so the absence is data rather than a silence.
+conformance:
+  - id: oai-pmh-2.0
+    name: Open Archives Initiative Protocol for Metadata Harvesting 2.0
+    conforms: true
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/oaipmh?verb=Identify
+    detail: >-
+      HTTP 200, text/xml. Response is a valid OAI-PMH envelope declaring protocolVersion 2.0,
+      repositoryName "Forest Service Research Data Archive", baseURL
+      https://www.fs.usda.gov/rds/archive/webservice/oaipmh, earliestDatestamp 2016-02-22,
+      deletedRecord "no", and gzip/deflate compression. Verbs Identify and ListMetadataFormats
+      were both exercised.
+    domain_standard: true
+    market: research data repositories / scholarly metadata harvesting
+  - id: oai-dc
+    name: Dublin Core metadata (oai_dc) via OAI-PMH
+    conforms: true
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/oaipmh?verb=ListMetadataFormats
+    detail: >-
+      ListMetadataFormats returns metadataPrefix "oai_dc" against schema
+      http://www.openarchives.org/OAI/2.0/oai_dc.xsd.
+  - id: fgdc-csdgm
+    name: FGDC Content Standard for Digital Geospatial Metadata (FGDC-STD-001.1-1999)
+    conforms: true
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/oaipmh?verb=ListMetadataFormats
+    detail: >-
+      The archive offers a second metadataPrefix, "fgdc", bound to schema
+      http://www.fs.usda.gov/rds/rdaoaipmh/fgdc/fgdc-std-001.1-1999.xsd — the U.S. federal
+      geospatial metadata standard, served alongside Dublin Core.
+    domain_standard: true
+    market: U.S. federal geospatial data
+  - id: dcat-us-1.1
+    name: DCAT-US 1.1 / Project Open Data catalog schema
+    conforms: true
+    evidence: https://data-usfs.hub.arcgis.com/api/feed/dcat-us/1.1.json
+    detail: >-
+      HTTP 200, application/json, ~2 MB. Body declares
+      "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+      "@type": "dcat:Catalog" and
+      "conformsTo": "https://project-open-data.cio.gov/v1.1/schema", carrying a dataset[] array of
+      dcat:Dataset entries. This is the machine-readable inventory required of U.S. federal
+      agencies under the OPEN Government Data Act, published by the Forest Service's own
+      Geospatial Data Discovery site.
+    domain_standard: true
+    market: U.S. federal open government data
+  - id: doi-crossref
+    name: DOI persistent identifiers with Crossref funder registry cross-references
+    conforms: true
+    evidence: https://www.fs.usda.gov/rds/archive/webservice/product?id=RDS-2013-0001
+    detail: >-
+      Every product record carries a <doi> under the agency's 10.2737 prefix (e.g.
+      https://doi.org/10.2737/RDS-2013-0001), and the /organizations endpoint returns a
+      <crossref> block with Crossref Funder Registry ids (e.g. 100008144 for Alaska Department
+      of Fish and Game) alongside each funder.
+    domain_standard: true
+    market: scholarly and research-data publishing
+  - id: soap-wsdl-1.1
+    name: SOAP 1.1 / WSDL 1.1
+    conforms: true
+    evidence: https://apps.fs.usda.gov/arcx/services/EDW/EDW_BasicOwnership_01/MapServer?wsdl
+    detail: >-
+      HTTP 200, text/xml, 290 KB. A complete WSDL 1.1 document, targetNamespace
+      http://www.esri.com/schemas/ArcGIS/3.5.0, defining 55 portType operations and a
+      soap:address of https://apps.fs.usda.gov/arcx/services/EDW/EDW_BasicOwnership_01/MapServer.
+      Every service on both ArcGIS servers exposes the same ?wsdl surface.
+  - id: esri-arcgis-rest
+    name: Esri ArcGIS REST Services API (services directory + MapServer/FeatureServer resources)
+    conforms: true
+    evidence: https://apps.fs.usda.gov/arcx/rest/services?f=json
+    detail: >-
+      HTTP 200, application/json, currentVersion 11.5. Self-describing services directory listing
+      nine folders (EDW, RDW_AdminAndOwnership, RDW_Climate, RDW_FIA_ForestAtlas,
+      RDW_InventoryAndProducts, RDW_LandscapeAndWildlife, RDW_Wildfire, Utilities, wo_nrm_iweb);
+      the EDW folder alone enumerates 144 MapServer services, each with a ?f=json resource
+      document, layer list, capabilities string and error envelope.
+    domain_standard: true
+    market: geospatial web services
+  - id: ogc-api-features
+    name: OGC API - Features / OGC API common conformance
+    conforms: false
+    evidence: https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer?f=json
+    detail: >-
+      Probed and absent. The service resource documents return an empty supportedExtensions and a
+      capabilities string of "Map,Query,Data" only. No /conformance document is served on either
+      ArcGIS root.
+  - id: ogc-wms
+    name: OGC Web Map Service (classic OWS GetCapabilities)
+    conforms: false
+    evidence: https://apps.fs.usda.gov/arcx/services/EDW/EDW_BasicOwnership_01/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities
+    detail: >-
+      HTTP 400, "ArcGIS Server Error" — the OGC WMS server extension is not enabled on these
+      deployments. Retried on EDW_ForestSystemBoundaries_01 and RDW_Wildfire with the same 400.
+      The FSGeodata Clearinghouse Map Services page
+      (https://data.fs.usda.gov/geodata/edw/mapServices.php) names ArcGIS REST, ArcGIS Online,
+      Data.gov and the Hub site as the access routes and never mentions WMS, WFS or OGC, which
+      corroborates the probe. Access to these layers is Esri-native or SOAP, not OGC.
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence: https://www.fs.usda.gov/.well-known/oauth-authorization-server
+    detail: >-
+      404. No authorization server metadata on any host; none of the four public APIs
+      authenticates at all (see authentication/forest-service-authentication.yml).
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: https://apps.fs.usda.gov/arcx/rest/services/EDW/NOT_A_SERVICE/MapServer?f=json
+    detail: >-
+      No application/problem+json anywhere. The ArcGIS servers return a proprietary
+      {"error":{"code":…,"message":…,"details":[]}} envelope with HTTP 200; the Research Data
+      Archive and FIADB-API return HTML error pages. See errors/forest-service-error-catalog.yml.
+counts:
+  asserted: 11
+  conforming: 7
+  non_conforming: 4
+  domain_standards_conforming: 5

@@ -1,0 +1,50 @@
+generated: '2026-09-10'
+method: probed
+source: >-
+  Response headers observed on live unauthenticated calls to every Forest Service API surface,
+  plus a documentation search across the FIADB-API docs, the Research Data Archive API PDF and
+  the FSGeodata Clearinghouse help pages, 2026-09-10.
+limit_count: 0
+note: >-
+  An honest zero. The Forest Service documents no rate limit for any of its four public APIs, and
+  no surface returns a rate-limit header of any kind — no X-RateLimit-*, no RateLimit-*, no
+  Retry-After — on a successful or a failed response. That is not the same as unlimited: a caller
+  has no published budget and no runtime signal, so the only safe assumption for an automated
+  client is that throttling, if it exists, will arrive without warning at the edge (Azure Front
+  Door in front of www.fs.usda.gov, an F5 load balancer in front of the archive service) rather
+  than from the application. Politeness has to be self-imposed.
+rate_limits: []
+observed_headers:
+  - api: Forest Service Research Data Archive Web Service
+    url: https://www.fs.usda.gov/rds/archive/webservice/efrs
+    http_status: 200
+    rate_limit_headers: []
+    present: [date, content-type, cache-control, pragma, expires, set-cookie, x-frame-options, strict-transport-security, x-azure-ref, x-cache, accept-ranges]
+  - api: FIADB-API / EVALIDator
+    url: https://apps.fs.usda.gov/fiadb-api/fullreport?rselected=Land%20Use%20-%20Major&cselected=Land%20use&snum=79&wc=102020&outputFormat=NJSON
+    http_status: 200
+    rate_limit_headers: []
+    present: [date, content-type, content-length, connection, access-control-allow-origin, content-security-policy, x-frame-options, vary, set-cookie, strict-transport-security]
+  - api: FSGeodata ArcGIS REST services
+    url: https://apps.fs.usda.gov/arcx/rest/services?f=json
+    http_status: 200
+    rate_limit_headers: []
+exhaustion_status_code: null
+documentation_searched:
+  - url: https://apps.fs.usda.gov/fiadb-api/
+    status: 200
+    result: no limits stated
+  - url: https://www.fs.usda.gov/rds/archive/webservice/assets/ResearchDataArchiveAPIDocumentation.pdf
+    status: 200
+    result: >-
+      12-page API document covering global settings, /search, /product, /organizations and /efrs.
+      No rate limit, quota or throttling section.
+  - url: https://data.fs.usda.gov/geodata/help.php
+    status: 200
+    result: no limits stated
+practical_ceiling:
+  detail: >-
+    The one soft ceiling actually documented is a page-size default, not a rate: Research Data
+    Archive /search returns 10 rows unless `rows` is raised. Query cost is visible in the
+    response — every archive response echoes QTime (0.007-0.077 s across the calls we made) and
+    the FIADB-API returned a 34 KB estimate set in a single request.

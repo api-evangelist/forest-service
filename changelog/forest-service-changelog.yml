@@ -1,0 +1,73 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.fs.usda.gov/rds/archive/webservice/
+note: >-
+  The Forest Service publishes exactly one dated, versioned API changelog, and it belongs to the
+  Research Data Archive web service: a "Releases" table on the service's own landing page listing
+  five releases from 2014-12-18 to 2019-08-02 with per-release notes naming the endpoints and
+  parameters that changed. Nothing comparable exists for the FIADB-API (which states a bare
+  "Version 2.0" and a database version in each response citation) or for the two ArcGIS servers
+  (which report an Esri product version, not an agency release). The archive changelog has not
+  moved since 2019; that is a finding about currency, not a gap in our search.
+scheme: sequential major.minor.patch, undated between releases
+current_version: v2
+current_version_date: '2019-08-02'
+latest_entry_age_note: >-
+  No release recorded in the seven years to 2026-09-10, while the underlying API remains live and
+  answering (probed 2026-09-10).
+covers:
+  api: Forest Service Research Data Archive Web Service
+  base_url: https://www.fs.usda.gov/rds/archive/webservice
+entries:
+  - version: v2
+    date: '2019-08-02'
+    breaking: false
+    highlights:
+      - Archive site overhaul onto a new back-end database; web services stated to behave exactly as before.
+      - >-
+        OAI-PMH web services made available at
+        https://www.fs.usda.gov/rds/archive/webservice/oaipmh and brought up to date (previously
+        carried data only through March 2016).
+    additions:
+      - OAI-PMH 2.0 endpoint
+  - version: v1.2.1
+    date: '2016-03-24'
+    breaking: false
+    highlights:
+      - Organizations API — fixed a bug that matched names with incorrect acronyms.
+  - version: v1.2
+    date: '2015-12-15'
+    breaking: false
+    highlights:
+      - New /efrs API listing the Experimental Forests and Ranges with products in the archive.
+      - Search API gained an `efr` filter accepting values from /efrs.
+      - Search and Product APIs gained a `geo` [latitude,longitude] element under <coordinates>.
+    additions:
+      - /efrs
+      - search.efr
+      - search.geo
+      - product.geo
+  - version: v1.1
+    date: '2015-01-08'
+    breaking: false
+    highlights:
+      - Search API gained funder `acronym` under <funder>; the `funder` filter now accepts full name or acronym.
+      - Product API gained latitude/longitude box coordinates under <coordinates> and funder acronym.
+      - Organizations API gained `acronym`.
+  - version: v1.0
+    date: '2014-12-18'
+    breaking: false
+    highlights:
+      - Initial deployment.
+other_surfaces_without_a_changelog:
+  - api: FIADB-API / EVALIDator
+    version_signal: >-
+      "FIADB-API web-application Version 2.0" and database version FIADB_1.9.5.00, both emitted in
+      the citation string of every JSON response (observed 2026-09-10). No dated release notes.
+    evidence: https://apps.fs.usda.gov/fiadb-api/fullreport?rselected=Land%20Use%20-%20Major&cselected=Land%20use&snum=79&wc=102020&outputFormat=NJSON
+  - api: FSGeodata ArcGIS REST services (arcx and fsgisx01)
+    version_signal: >-
+      currentVersion 11.5 — the Esri ArcGIS Server product version, not a Forest Service release
+      number. Individual services carry a numeric suffix (_01, _02) that acts as an informal
+      version; EDW_BasicOwnership publishes both _01 and _02.
+    evidence: https://apps.fs.usda.gov/arcx/rest/services?f=json
