@@ -47,11 +47,11 @@ tags:
   - Federal-Government
   - Forests
   - Geospatial
-  - Open-Data
-  - Research-Data
+  - Open Data
+  - Research Data
   - Forest-Inventory
   - Wildfire
-  - Public-Lands
+  - Public Lands
   - Environment
 tags_raw:
   - Agriculture
@@ -81,6 +81,10 @@ apis:
     image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/forest-service.png
     baseURL: https://apps.fs.usda.gov/fiadb-api
     tags:
+      - Forest-Inventory
+      - Research Data
+      - Statistics
+    tags_raw:
       - Forest Inventory
       - Research Data
       - Statistics
