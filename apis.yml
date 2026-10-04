@@ -44,7 +44,7 @@ modified: '2026-09-10'
 position: Producing
 tags:
   - Agriculture
-  - Federal-Government
+  - Federal Government
   - Forests
   - Geospatial
   - Open Data
@@ -53,6 +53,8 @@ tags:
   - Wildfire
   - Public Lands
   - Environment
+  - OAI-PMH
+  - Research Repository
 tags_raw:
   - Agriculture
   - Federal Government
@@ -64,6 +66,9 @@ tags_raw:
   - Wildfire
   - Public Lands
   - Environment
+  - Federal-Government
+  - OAI-PMH
+  - Research Repository
 url: >-
   https://raw.githubusercontent.com/api-evangelist/forest-service/refs/heads/main/apis.yml
 specificationVersion: '0.23'
