@@ -1,0 +1,123 @@
+# Forest Service (forest-service)
+
+<!-- API-EVANGELIST-PROVENANCE:BEGIN -->
+> ### About this repository
+>
+> **This is not our API.** This repository is an independent, third-party profile of a company's
+> **publicly available** API surface, maintained by [API Evangelist](https://apievangelist.com).
+> API Evangelist does not operate, host, resell, or support this company's APIs, and is not
+> affiliated with or endorsed by the company unless stated on the profile.
+>
+> **Where the information came from.** Everything here is assembled from material a member of the
+> public can reach with a browser and no credentials — the company's own website, developer portal
+> and documentation, the specifications it publishes for public use (OpenAPI, AsyncAPI, JSON Schema,
+> `apis.json`, `llms.txt` and similar), its public repositories, and its public status, pricing and
+> changelog pages. **Nothing here is obtained by breaching a system, defeating an access control, or
+> using credentials of any kind.**
+>
+> **The rating is an independent assessment.** The Kin Score and Agent Readiness rating are
+> independently calculated scores of a company's *public* API artifacts, produced by API Evangelist
+> against a published rubric. They are not certifications, endorsements, security assessments, or
+> audits, and they score published artifacts — not the quality, safety, or security of the software.
+>
+> **Corrections, re-scores, and removal are free.** No partnership, contract, or purchase is
+> required, and you do not need to justify the request.
+>
+> - **Something wrong?** Open an issue on this repository, or email
+>   [info@apievangelist.com](mailto:info@apievangelist.com).
+> - **Published something new?** Ask for a re-score and we will re-run the rating.
+> - **Want the listing taken down?** Say so and we will honor it. The profile is reduced to your
+>   company name, a factual description, and a link to your own site, and the company is recorded as
+>   **unrated** — never scored zero for having asked.
+>
+> **Response times.** Acknowledgement within **one business day**; removal or restriction within
+> **two business days**; corrections and re-scores within **five business days**.
+>
+> **Not from the company, and here with a question?** You are welcome here — we would rather be the
+> front line and point you the right way than have a good report go nowhere. What this repository
+> can answer is narrow, though, so it is worth knowing who you are actually looking for:
+>
+> - **A question about how the API works, an account, billing, or a bug in the service** — that is
+>   the company's own support, not us. We profile this API; we do not operate it and cannot see
+>   your account.
+> - **A bug in an open-source project we only catalog** — file it on that project's own repository.
+>   This has happened with a real and correct bug report that reached us instead of the people who
+>   could fix it, which helped nobody.
+> - **Anything about this listing itself** — the description, the tags, the rating, a missing or
+>   wrong artifact — is ours. Open an issue here.
+> - **Not sure, or something general about API Evangelist or APIs.io** — open an issue on the
+>   [APIs.io Inbox](https://github.com/api-search/inbox) and we will route it.
+>
+> **This repository contains no software, and we will never ask you to download anything.** There is
+> no build, release, installer, or binary here — only text and machine-readable API descriptions, so
+> there is nothing here that can be "corrupt" or need "repairing". Any issue, comment, or email
+> claiming otherwise and offering a download link is not from us and is hostile. Do not follow the
+> link; it is a lure. Report it to GitHub and, if you like, tell us at
+> [info@apievangelist.com](mailto:info@apievangelist.com) so we can take it down.
+>
+> **On a security or compliance team?** Email
+> [info@apievangelist.com](mailto:info@apievangelist.com) with *security* in the subject line and
+> you will get a person, not a form. We will tell you exactly which public URLs this profile was
+> built from so your team can see the same surface we did, and we will take the listing down on
+> request while you work through it.
+>
+> Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
+<!-- API-EVANGELIST-PROVENANCE:END -->
+
+The Forest Service is an agency within the U.S. Department of Agriculture that is responsible for managing the nation's forests and grasslands.
+
+**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/forest-service/refs/heads/main/apis.yml)
+
+## Scope
+
+- **Type:** Index
+- **Position:** Producing
+- **Access:** 3rd-Party
+
+## Tags:
+
+ - Agriculture
+ - Federal Government
+ - Forests
+
+## Timestamps
+
+- **Created:** 2024-12-25
+- **Modified:** 2026-04-28
+
+## APIs
+
+The Forest Service runs four free, entirely unauthenticated public HTTP APIs plus a
+machine-readable open-data catalog. Every endpoint referenced in this repository was called
+anonymously and returned HTTP 200 on 2026-09-10.
+
+- **[FIADB-API (EVALIDator)](https://apps.fs.usda.gov/fiadb-api/)** — `https://apps.fs.usda.gov/fiadb-api` —
+  Forest Inventory and Analysis population estimates with standard errors, variances and plot
+  counts. Live value dictionaries at `/fullreport/parameters/<name>`.
+- **[Research Data Archive Web Service](https://www.fs.usda.gov/rds/archive/webservice/)** —
+  `https://www.fs.usda.gov/rds/archive/webservice` — `/search`, `/product`, `/organizations`,
+  `/efrs`, plus an OAI-PMH 2.0 repository at `/oaipmh` serving Dublin Core and FGDC metadata.
+  DOI-registered under the `10.2737` prefix.
+- **[FSGeodata Enterprise Data Warehouse Map Services](https://data.fs.usda.gov/geodata/edw/mapServices.php)** —
+  `https://apps.fs.usda.gov/arcx/rest/services` — ArcGIS REST 11.5, nine folders, 144 MapServer
+  services in EDW alone. Each service also publishes a WSDL 1.1 SOAP contract with 55 operations.
+- **[FSGeodata Research Data Warehouse Map Services](https://data.fs.usda.gov/geodata/)** —
+  `https://apps.fs.usda.gov/fsgisx01/rest/services` — a second ArcGIS REST server.
+- **[Geospatial Data Discovery](https://data-usfs.hub.arcgis.com/)** —
+  `https://data-usfs.hub.arcgis.com/api/feed/dcat-us/1.1.json` — the agency's DCAT-US 1.1 /
+  Project Open Data dataset catalog.
+
+There is no OpenAPI, AsyncAPI or GraphQL description for any of these surfaces, and no MCP server
+or A2A agent card is published. The one first-party OpenAPI the agency ever shipped — a Swagger
+2.0 description of the Open Forest permit platform — describes a decommissioned service whose
+host no longer resolves, and is recorded in `lifecycle/` rather than `openapi/` for that reason.
+
+## Common Properties
+
+- [Website](https://www.fs.usda.gov/)
+
+## Maintainers
+
+**FN:** Kin Lane
+
+**Email:** kin@apievangelist.com
