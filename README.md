@@ -1,4 +1,4 @@
-# Forest Service (forest-service)
+# Forest Service
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,60 +64,110 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-The Forest Service is an agency within the U.S. Department of Agriculture that is responsible for managing the nation's forests and grasslands.
+The U.S. Forest Service is an agency of the U.S. Department of Agriculture managing 193 million acres of national forests and grasslands. Not a software vendor, it nonetheless runs four free, entirely unauthenticated public HTTP APIs: the FIADB-API behind EVALIDator, returning Forest Inventory and Analysis population estimates with sampling errors from the nation's continuous forest census; the Research Data Archive web service, a search-and-retrieve API over DOI-registered research datasets that also runs an OAI-PMH 2.0 repository serving Dublin Core and FGDC metadata; and two FSGeodata ArcGIS REST servers publishing the Enterprise and Research Data Warehouse map services, 144 in the EDW folder alone, each also exposing a SOAP contract. A DCAT-US 1.1 open-data catalog is published through Geospatial Data Discovery. No API needs a key or an account, every operation is a read, and the data are works of the U.S. government.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/forest-service/refs/heads/main/apis.yml)
+**Areas:** Agriculture · Federal Government · Forests · Geospatial · Open Data · Research Data · Forest-Inventory · Wildfire · Public Lands · Environment · OAI-PMH · Research Repository
 
-## Scope
+## Forest Service on APIs.io
 
-- **Type:** Index
-- **Position:** Producing
-- **Access:** 3rd-Party
+Everything profiled for Forest Service is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/forest-service/](https://apis.io/providers/forest-service/)** — or go straight to one of the APIs or properties below.
 
-## Tags:
+### APIs (5)
 
- - Agriculture
- - Federal Government
- - Forests
+- [FIADB-API (EVALIDator)](https://apis.io/apis/forest-service/fiadb-api/) — The Forest Inventory and Analysis Database API, the machine surface behind the EVALIDator web application. A single GET or POST to /fullreport returns…
+- [Forest Service Research Data Archive Web Service](https://apis.io/apis/forest-service/research-data-archive/) — Search and retrieve DOI-registered Forest Service research data publications. Four REST endpoints — /search, /product, /organizations and /efrs — plus a…
+- [FSGeodata Enterprise Data Warehouse Map Services](https://apis.io/apis/forest-service/fsgeodata-edw-map-services/) — The Forest Service enterprise ArcGIS REST server. A self-describing services directory (currentVersion 11.5) across nine folders — EDW,…
+- [FSGeodata Research Data Warehouse Map Services](https://apis.io/apis/forest-service/fsgeodata-rdw-map-services/) — A second Forest Service ArcGIS REST server carrying the research data warehouse folders — RDW_AdminAndOwnership, RDW_Climate, RDW_FHP_TreeSpeciesMetrics,…
+- [U.S. Forest Service Geospatial Data Discovery (DCAT-US catalog)](https://apis.io/apis/forest-service/geospatial-data-discovery/) — The agency's Geospatial Data Discovery site publishes a machine-readable DCAT-US 1.1 / Project Open Data catalog of Forest Service datasets — a ~2 MB JSON…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2024-12-25
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-The Forest Service runs four free, entirely unauthenticated public HTTP APIs plus a
-machine-readable open-data catalog. Every endpoint referenced in this repository was called
-anonymously and returned HTTP 200 on 2026-09-10.
+Model Context Protocol servers that expose the API to agents.
 
-- **[FIADB-API (EVALIDator)](https://apps.fs.usda.gov/fiadb-api/)** — `https://apps.fs.usda.gov/fiadb-api` —
-  Forest Inventory and Analysis population estimates with standard errors, variances and plot
-  counts. Live value dictionaries at `/fullreport/parameters/<name>`.
-- **[Research Data Archive Web Service](https://www.fs.usda.gov/rds/archive/webservice/)** —
-  `https://www.fs.usda.gov/rds/archive/webservice` — `/search`, `/product`, `/organizations`,
-  `/efrs`, plus an OAI-PMH 2.0 repository at `/oaipmh` serving Dublin Core and FGDC metadata.
-  DOI-registered under the `10.2737` prefix.
-- **[FSGeodata Enterprise Data Warehouse Map Services](https://data.fs.usda.gov/geodata/edw/mapServices.php)** —
-  `https://apps.fs.usda.gov/arcx/rest/services` — ArcGIS REST 11.5, nine folders, 144 MapServer
-  services in EDW alone. Each service also publishes a WSDL 1.1 SOAP contract with 55 operations.
-- **[FSGeodata Research Data Warehouse Map Services](https://data.fs.usda.gov/geodata/)** —
-  `https://apps.fs.usda.gov/fsgisx01/rest/services` — a second ArcGIS REST server.
-- **[Geospatial Data Discovery](https://data-usfs.hub.arcgis.com/)** —
-  `https://data-usfs.hub.arcgis.com/api/feed/dcat-us/1.1.json` — the agency's DCAT-US 1.1 /
-  Project Open Data dataset catalog.
+- [forest-service-mcp.yml](https://apis.io/servers/forest-service/forest-service-mcp-yml/)
 
-There is no OpenAPI, AsyncAPI or GraphQL description for any of these surfaces, and no MCP server
-or A2A agent card is published. The one first-party OpenAPI the agency ever shipped — a Swagger
-2.0 description of the Open Forest permit platform — describes a decommissioned service whose
-host no longer resolves, and is recorded in `lifecycle/` rather than `openapi/` for that reason.
+#### Security (2)
 
-## Common Properties
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Forest Service Authentication](https://apis.io/security/forest-service/forest-service-authentication/)
+- [Forest Service Domain Security](https://apis.io/security/forest-service/forest-service-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Forest Service Plans Pricing](https://apis.io/plans/forest-service/forest-service-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Forest Service Rate Limits](https://apis.io/rate-limits/forest-service/forest-service-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.fs.usda.gov/)
+- [Support](https://www.fs.usda.gov/about-agency/contact-us)
+- [Terms of service](https://www.fs.usda.gov/about-agency/disclaimers-important-notices)
+- [Privacy policy](https://www.usda.gov/privacy-policy)
+- [GitHub](https://github.com/USDAForestService)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 34.5** — thin · rubric 0.24.0 · scored 2026-10-17
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 24.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 54.2 |
+| Access clarity | 21.1 |
+
+**Agent readiness 21.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/forest-service/](https://apis.io/providers/forest-service/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Forest Service: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/forest-service/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
